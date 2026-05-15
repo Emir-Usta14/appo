@@ -51,8 +51,6 @@ $rank++;
 
 <br><br>
 
-<div class="button-group">
-
 <a href="quiz.php">
 <button class="submit-btn">
 Play Again
@@ -66,8 +64,6 @@ Play Again
 Return Home
 </button>
 </a>
-
-</div>
 
 </div>
 
