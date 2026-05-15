@@ -35,6 +35,17 @@ $questions = array_slice($questions, 0, 10);
 
 <?php
 foreach ($questions as $index => $q) {
+
+if (
+    !isset($q["question"]) ||
+    !isset($q["A"]) ||
+    !isset($q["B"]) ||
+    !isset($q["C"]) ||
+    !isset($q["D"]) ||
+    !isset($q["answer"])
+) {
+    continue;
+}
 ?>
 
 <div class="question-box">
