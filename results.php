@@ -2,38 +2,43 @@
 session_start();
 include "db.php";
 
-if (!isset($_SESSION["username"])) {
+if(!isset($_SESSION["username"])){
     header("Location: login.php");
     exit();
 }
 
 $score = 0;
 
-for ($i = 1; $i <= 10; $i++) {
+for($i = 1; $i <= 10; $i++){
 
-    $userAnswer = $_POST["q".$i] ?? "";
-    $correctAnswer = $_POST["correct".$i] ?? "";
-
-    if ($userAnswer == $correctAnswer) {
+    if(
+        isset($_POST["question$i"]) &&
+        $_POST["question$i"] == $_POST["correct$i"]
+    ){
         $score++;
     }
 }
 
 $username = $_SESSION["username"];
 
-$sql = "INSERT INTO scores (username, score)
-VALUES ('$username', '$score')";
+$stmt = $conn->prepare("
+    INSERT INTO scores (username, score)
+    VALUES (?, ?)
+");
 
-$conn->query($sql);
+$stmt->bind_param("si", $username, $score);
+
+$stmt->execute();
+
+unset($_SESSION["questions"]);
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-<title>Results</title>
-<link rel="stylesheet" href="style.css">
+    <title>Results</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <div class="container">
@@ -48,7 +53,7 @@ You scored <?php echo $score; ?>/10
 
 </div>
 
-<br>
+<br><br>
 
 <a href="quiz.php">
 <button class="submit-btn">
