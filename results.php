@@ -2,20 +2,26 @@
 session_start();
 include "db.php";
 
-if(!isset($_SESSION["username"])){
+if (!isset($_SESSION["username"])) {
     header("Location: login.php");
     exit();
 }
 
 $score = 0;
 
-for($i = 1; $i <= 10; $i++){
+if (
+    isset($_POST["answers"]) &&
+    isset($_POST["correct_answers"])
+) {
 
-    if(
-        isset($_POST["question$i"]) &&
-        $_POST["question$i"] == $_POST["correct$i"]
-    ){
-        $score++;
+    foreach ($_POST["answers"] as $index => $answer) {
+
+        if (
+            isset($_POST["correct_answers"][$index]) &&
+            $answer == $_POST["correct_answers"][$index]
+        ) {
+            $score++;
+        }
     }
 }
 
@@ -29,8 +35,6 @@ $stmt = $conn->prepare("
 $stmt->bind_param("si", $username, $score);
 
 $stmt->execute();
-
-unset($_SESSION["questions"]);
 ?>
 
 <!DOCTYPE html>
