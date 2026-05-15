@@ -49,7 +49,7 @@ foreach($questions as $q){
 </h3>
 
 <?php
-foreach($q["answers"] as $answer){
+foreach($q["options"] as $answer){
 ?>
 
 <label>
@@ -74,7 +74,7 @@ required
 <input
 type="hidden"
 name="correct<?php echo $count; ?>"
-value="<?php echo $q["correct"]; ?>"
+value="<?php echo $q["answer"]; ?>"
 >
 
 </div>
