@@ -6,11 +6,16 @@ if(!isset($_SESSION["username"])){
     exit();
 }
 
-$questions = json_decode(file_get_contents("questions.json"), true);
+if(!isset($_SESSION["questions"])){
 
-shuffle($questions);
+    $questions = json_decode(file_get_contents("questions.json"), true);
 
-$questions = array_slice($questions, 0, 10);
+    shuffle($questions);
+
+    $_SESSION["questions"] = array_slice($questions, 0, 10);
+}
+
+$questions = $_SESSION["questions"];
 ?>
 
 <!DOCTYPE html>
@@ -25,7 +30,9 @@ $questions = array_slice($questions, 0, 10);
 
 <h1>Quiz Time</h1>
 
-<h2 id="timer">Time Left: 5:00</h2>
+<h2 id="timer">
+Time Left: 5:00
+</h2>
 
 <form action="results.php" method="POST">
 
@@ -101,7 +108,7 @@ let time = 300;
 
 const timer = document.getElementById("timer");
 
-setInterval(() => {
+const countdown = setInterval(() => {
 
 let minutes = Math.floor(time / 60);
 let seconds = time % 60;
@@ -115,8 +122,12 @@ timer.innerHTML = "Time Left: " + minutes + ":" + seconds;
 time--;
 
 if(time < 0){
-    alert("Time is up!");
-    window.location.href = "results.php";
+
+clearInterval(countdown);
+
+alert("Time is up!");
+
+document.forms[0].submit();
 }
 
 }, 1000);
