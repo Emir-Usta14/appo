@@ -9,22 +9,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST["username"]);
     $password = trim($_POST["password"]);
 
-    $check = $conn->query("
-        SELECT *
+    $check = $conn->prepare("
+        SELECT id
         FROM users
-        WHERE username='$username'
+        WHERE username = ?
     ");
 
-    if ($check->num_rows > 0) {
+    $check->bind_param("s", $username);
+
+    $check->execute();
+
+    $result = $check->get_result();
+
+    if ($result->num_rows > 0) {
 
         $error = "Username already exists";
 
     } else {
 
-        $conn->query("
-            INSERT INTO users(username,password,is_admin)
-            VALUES('$username','$password',0)
+        $stmt = $conn->prepare("
+            INSERT INTO users (username, password, is_admin)
+            VALUES (?, ?, 0)
         ");
+
+        $stmt->bind_param("ss", $username, $password);
+
+        $stmt->execute();
 
         header("Location: login.php");
         exit();
@@ -70,9 +80,11 @@ Create Account
 
 </form>
 
-<p style="color:red;">
+<br>
+
+<div style="color:red; font-size:22px;">
 <?php echo $error; ?>
-</p>
+</div>
 
 <br>
 
