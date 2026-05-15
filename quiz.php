@@ -23,56 +23,88 @@ $questions = array_slice($questions, 0, 10);
 
 <div class="container">
 
-<h1>Quiz</h1>
+<h1>Quiz Time</h1>
 
-<div id="timer">Time Left: 5:00</div>
+<div id="timer">
+Time Left: 5:00
+</div>
+
+<br>
 
 <a href="index.php">
-<button class="submit-btn">Exit Quiz</button>
+<button class="submit-btn">
+Exit Quiz
+</button>
 </a>
+
+<br><br>
 
 <form action="results.php" method="POST">
 
 <?php
 foreach ($questions as $index => $q) {
-
-if (
-    !isset($q["question"]) ||
-    !isset($q["A"]) ||
-    !isset($q["B"]) ||
-    !isset($q["C"]) ||
-    !isset($q["D"]) ||
-    !isset($q["answer"])
-) {
-    continue;
-}
 ?>
 
 <div class="question-box">
 
 <h2>
-<?php echo ($index + 1) . ". " . $q["question"]; ?>
+<?php echo ($index + 1) . ". " . htmlspecialchars($q["question"]); ?>
 </h2>
 
-<?php
-foreach (["A", "B", "C", "D"] as $letter) {
-?>
-
 <label class="option">
+
 <input
 type="radio"
 name="answers[<?php echo $index; ?>]"
-value="<?php echo $letter; ?>"
+value="A"
 required
 >
 
-<?php echo $letter . ": " . $q[$letter]; ?>
+A. <?php echo htmlspecialchars($q["A"]); ?>
 
 </label>
 
-<?php
-}
-?>
+<br>
+
+<label class="option">
+
+<input
+type="radio"
+name="answers[<?php echo $index; ?>]"
+value="B"
+>
+
+B. <?php echo htmlspecialchars($q["B"]); ?>
+
+</label>
+
+<br>
+
+<label class="option">
+
+<input
+type="radio"
+name="answers[<?php echo $index; ?>]"
+value="C"
+>
+
+C. <?php echo htmlspecialchars($q["C"]); ?>
+
+</label>
+
+<br>
+
+<label class="option">
+
+<input
+type="radio"
+name="answers[<?php echo $index; ?>]"
+value="D"
+>
+
+D. <?php echo htmlspecialchars($q["D"]); ?>
+
+</label>
 
 <input
 type="hidden"
@@ -81,6 +113,8 @@ value="<?php echo $q["answer"]; ?>"
 >
 
 </div>
+
+<br>
 
 <?php
 }
@@ -95,6 +129,7 @@ Submit Quiz
 </div>
 
 <script>
+
 let timeLeft = 300;
 
 const timer = document.getElementById("timer");
@@ -108,17 +143,22 @@ if(seconds < 10){
     seconds = "0" + seconds;
 }
 
-timer.innerHTML = "Time Left: " + minutes + ":" + seconds;
+timer.innerHTML =
+"Time Left: " + minutes + ":" + seconds;
 
 timeLeft--;
 
 if(timeLeft < 0){
-    clearInterval(countdown);
-    alert("Time is up!");
-    document.forms[0].submit();
+
+clearInterval(countdown);
+
+alert("Time is up!");
+
+document.forms[0].submit();
 }
 
 }, 1000);
+
 </script>
 
 </body>
