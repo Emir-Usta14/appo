@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION["username"])) {
+if(!isset($_SESSION["username"])){
     header("Location: login.php");
     exit();
 }
@@ -12,22 +12,20 @@ shuffle($questions);
 
 $questions = array_slice($questions, 0, 10);
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
-<title>Quiz</title>
-<link rel="stylesheet" href="style.css">
+    <title>Quiz</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <div class="container">
 
 <h1>Quiz Time</h1>
 
-<div class="welcome">
-Welcome <?php echo $_SESSION["username"]; ?>
-</div>
+<h2 id="timer">Time Left: 5:00</h2>
 
 <form action="results.php" method="POST">
 
@@ -39,54 +37,91 @@ foreach($questions as $q){
 
 <div class="question-box">
 
-<div class="question">
+<h3>
 <?php echo $count . ". " . $q["question"]; ?>
-</div>
+</h3>
 
-<div class="answers">
+<?php
+foreach($q["answers"] as $answer){
+?>
 
-<label class="answer-option">
-<input type="radio" name="q<?php echo $count; ?>" value="A" required>
-A. <?php echo $q["A"]; ?>
+<label>
+
+<input
+type="radio"
+name="question<?php echo $count; ?>"
+value="<?php echo $answer; ?>"
+required
+>
+
+<?php echo $answer; ?>
+
 </label>
 
-<label class="answer-option">
-<input type="radio" name="q<?php echo $count; ?>" value="B">
-B. <?php echo $q["B"]; ?>
-</label>
+<br>
 
-<label class="answer-option">
-<input type="radio" name="q<?php echo $count; ?>" value="C">
-C. <?php echo $q["C"]; ?>
-</label>
-
-<label class="answer-option">
-<input type="radio" name="q<?php echo $count; ?>" value="D">
-D. <?php echo $q["D"]; ?>
-</label>
-
-</div>
+<?php
+}
+?>
 
 <input
 type="hidden"
 name="correct<?php echo $count; ?>"
-value="<?php echo $q["answer"]; ?>"
+value="<?php echo $q["correct"]; ?>"
 >
 
 </div>
+
+<br>
 
 <?php
 $count++;
 }
 ?>
 
-<button class="submit-btn" type="submit">
+<button type="submit" class="submit-btn">
 Submit Quiz
 </button>
 
 </form>
 
+<br>
+
+<a href="index.php">
+<button class="submit-btn">
+Exit Quiz
+</button>
+</a>
+
 </div>
+
+<script>
+
+let time = 300;
+
+const timer = document.getElementById("timer");
+
+setInterval(() => {
+
+let minutes = Math.floor(time / 60);
+let seconds = time % 60;
+
+if(seconds < 10){
+    seconds = "0" + seconds;
+}
+
+timer.innerHTML = "Time Left: " + minutes + ":" + seconds;
+
+time--;
+
+if(time < 0){
+    alert("Time is up!");
+    window.location.href = "results.php";
+}
+
+}, 1000);
+
+</script>
 
 </body>
 </html>
