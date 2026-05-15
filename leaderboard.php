@@ -1,4 +1,3 @@
-
 <?php
 include "db.php";
 
@@ -50,14 +49,6 @@ $rank++;
 
 </table>
 
-<br>
-
-<a href="quiz.php">
-<button class="submit-btn">
-Play Again
-</button>
-</a>
-
 <br><br>
 
 <div class="button-group">
@@ -77,5 +68,8 @@ Return Home
 </a>
 
 </div>
+
+</div>
+
 </body>
 </html>
