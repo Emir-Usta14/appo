@@ -52,13 +52,19 @@ $rank++;
 
 <br>
 
-<a href="index.php">
-<button>
-Return Home
+<a href="quiz.php">
+<button class="submit-btn">
+Play Again
 </button>
 </a>
 
-</div>
+<br><br>
+
+<a href="index.php">
+<button class="submit-btn">
+Return Home
+</button>
+</a>
 
 </body>
 </html>
