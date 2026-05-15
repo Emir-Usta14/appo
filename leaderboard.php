@@ -60,11 +60,22 @@ Play Again
 
 <br><br>
 
+<div class="button-group">
+
+<a href="quiz.php">
+<button class="submit-btn">
+Play Again
+</button>
+</a>
+
+<br><br>
+
 <a href="index.php">
 <button class="submit-btn">
 Return Home
 </button>
 </a>
 
+</div>
 </body>
 </html>
