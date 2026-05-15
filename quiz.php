@@ -12,12 +12,11 @@ shuffle($questions);
 
 $questions = array_slice($questions, 0, 10);
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Quiz Time</title>
-    <link rel="stylesheet" href="style.css">
+<title>Quiz</title>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
