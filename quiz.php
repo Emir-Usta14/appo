@@ -1,21 +1,16 @@
 <?php
 session_start();
 
-if(!isset($_SESSION["username"])){
+if (!isset($_SESSION["username"])) {
     header("Location: login.php");
     exit();
 }
 
-if(!isset($_SESSION["questions"])){
+$questions = json_decode(file_get_contents("questions.json"), true);
 
-    $questions = json_decode(file_get_contents("questions.json"), true);
+shuffle($questions);
 
-    shuffle($questions);
-
-    $_SESSION["questions"] = array_slice($questions, 0, 10);
-}
-
-$questions = $_SESSION["questions"];
+$questions = array_slice($questions, 0, 10);
 ?>
 
 <!DOCTYPE html>
@@ -28,44 +23,41 @@ $questions = $_SESSION["questions"];
 
 <div class="container">
 
-<h1>Quiz Time</h1>
+<h1>Quiz</h1>
 
-<h2 id="timer">
-Time Left: 5:00
-</h2>
+<div id="timer">Time Left: 5:00</div>
+
+<a href="index.php">
+<button class="submit-btn">Exit Quiz</button>
+</a>
 
 <form action="results.php" method="POST">
 
 <?php
-$count = 1;
-
-foreach($questions as $q){
+foreach ($questions as $index => $q) {
 ?>
 
 <div class="question-box">
 
-<h3>
-<?php echo $count . ". " . $q["question"]; ?>
-</h3>
+<h2>
+<?php echo ($index + 1) . ". " . $q["question"]; ?>
+</h2>
 
 <?php
-foreach($q["options"] as $answer){
+foreach (["A", "B", "C", "D"] as $letter) {
 ?>
 
-<label>
-
+<label class="option">
 <input
 type="radio"
-name="question<?php echo $count; ?>"
-value="<?php echo $answer; ?>"
+name="answers[<?php echo $index; ?>]"
+value="<?php echo $letter; ?>"
 required
 >
 
-<?php echo $answer; ?>
+<?php echo $letter . ": " . $q[$letter]; ?>
 
 </label>
-
-<br>
 
 <?php
 }
@@ -73,16 +65,13 @@ required
 
 <input
 type="hidden"
-name="correct<?php echo $count; ?>"
+name="correct_answers[<?php echo $index; ?>]"
 value="<?php echo $q["answer"]; ?>"
 >
 
 </div>
 
-<br>
-
 <?php
-$count++;
 }
 ?>
 
@@ -92,26 +81,17 @@ Submit Quiz
 
 </form>
 
-<br>
-
-<a href="index.php">
-<button class="submit-btn">
-Exit Quiz
-</button>
-</a>
-
 </div>
 
 <script>
-
-let time = 300;
+let timeLeft = 300;
 
 const timer = document.getElementById("timer");
 
 const countdown = setInterval(() => {
 
-let minutes = Math.floor(time / 60);
-let seconds = time % 60;
+let minutes = Math.floor(timeLeft / 60);
+let seconds = timeLeft % 60;
 
 if(seconds < 10){
     seconds = "0" + seconds;
@@ -119,19 +99,15 @@ if(seconds < 10){
 
 timer.innerHTML = "Time Left: " + minutes + ":" + seconds;
 
-time--;
+timeLeft--;
 
-if(time < 0){
-
-clearInterval(countdown);
-
-alert("Time is up!");
-
-document.forms[0].submit();
+if(timeLeft < 0){
+    clearInterval(countdown);
+    alert("Time is up!");
+    document.forms[0].submit();
 }
 
 }, 1000);
-
 </script>
 
 </body>
