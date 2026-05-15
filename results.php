@@ -11,30 +11,27 @@ $score = 0;
 
 for ($i = 1; $i <= 10; $i++) {
 
-    if (
-        isset($_POST["q$i"]) &&
-        isset($_POST["correct$i"])
-    ) {
+    $userAnswer = $_POST["q".$i] ?? "";
+    $correctAnswer = $_POST["correct".$i] ?? "";
 
-        if ($_POST["q$i"] == $_POST["correct$i"]) {
-            $score++;
-        }
+    if ($userAnswer == $correctAnswer) {
+        $score++;
     }
 }
 
 $username = $_SESSION["username"];
 
-$conn->query("
-    INSERT INTO scores(username, score)
-    VALUES('$username', '$score')
-");
+$sql = "INSERT INTO scores (username, score)
+VALUES ('$username', '$score')";
+
+$conn->query($sql);
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Results</title>
-    <link rel="stylesheet" href="style.css">
+<title>Results</title>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
