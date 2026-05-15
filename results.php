@@ -66,14 +66,6 @@ Leaderboard
 
 <br><br>
 
-<a href="profile.php">
-<button class="submit-btn">
-Profile
-</button>
-</a>
-
-<br><br>
-
 <a href="logout.php">
 <button class="submit-btn">
 Logout
